@@ -1,7 +1,6 @@
 import App from "@/App.vue";
 import { mount } from "@vue/test-utils";
 
-
 describe("Counter", () => {
   let wrapper;
   const findButtonByText = (text) =>
@@ -40,4 +39,10 @@ describe("Counter", () => {
       expect(wrapper.text()).toContain(expectedResult);
     }
   );
+  it("shows reset button when counter is below zero", async () => {
+    createComponent();
+    wrapper.vm.counter = -1;
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find({ ref: "reset" }).exists()).toBe(true);
+  });
 });
