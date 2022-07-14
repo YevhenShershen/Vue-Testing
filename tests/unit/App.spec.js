@@ -39,23 +39,21 @@ describe("Counter", () => {
       expect(wrapper.text()).toContain(expectedResult);
     }
   );
+  // создаем переменную кнопка что бы в случае если название кнопки будет изменено
+  //было удобно в одном месте изменять данные а не во всем коде
+  const RESET_BUTTON = 'Reset';
   it("shows reset button when counter is below zero", async () => {
     createComponent();
-    wrapper.vm.counter = -1;
-    await wrapper.vm.$nextTick();
-    //проверка на html
-    console.log(wrapper.html());
-    debugger
-    //38минута как проверять ошибки на тесты
-    //в терминале пишем
-    //node --inspect-brk ./node_modules/jest/bin/jest.js
-    expect(findButtonByText('Reset').exists()).toBe(true);
+    await findButtonByText("-").trigger("click");
+    expect(wrapper.text()).toContain("-1");
+
+    expect(findButtonByText(RESET_BUTTON).exists()).toBe(true);
   });
 
   it("does not shows reset button when counter is not below zero", async () => {
     createComponent();
-    wrapper.vm.counter = 1;
-    await wrapper.vm.$nextTick();
-    expect(findButtonByText('Reset')).toBe(undefined);
+
+    //неготивная проверка и это неправильно
+    expect(findButtonByText(RESET_BUTTON)).toBe(undefined);
   });
 });
