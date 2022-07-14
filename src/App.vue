@@ -1,11 +1,14 @@
 <template>
   <div id="app">
-    {{ counter }}
+    {{ counter }} / {{counter2}}
     <button @click="counter += 1">+</button>
     <button @click="counter -= 1">-</button>
     <button data-test-id="reset" v-if="counter < 0" @click="counter = 0">
       Reset
     </button>
+    <hr/>
+    <button @click="counter2 += 1">plus</button>
+    <button @click="counter2 -= 1">minus</button>
   </div>
 </template>
 
@@ -21,6 +24,7 @@ export default {
    data() {
     return {
       counter: 0,
+      counter2: 0,
     };
   },
   watch: {
@@ -30,6 +34,9 @@ export default {
         this.counter = newValue;
       },
     },
+    counter(){
+      this.counter2 = 0
+    }
   },
    methods: {
     handleKeyPress(e) {

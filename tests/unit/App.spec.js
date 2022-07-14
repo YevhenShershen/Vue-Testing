@@ -89,12 +89,14 @@ describe("Counter", () => {
       keyUpListener
     );
   });
-  it("correctly resets when initialValue is changed", async () => {
+  it("correctly resets both counters when initialValue is changed", async () => {
     const INITIAL_VALUE = 5;
     const NEW_INITIAL_VALUE = 10;
     createComponent({ initialValue: INITIAL_VALUE });
     await findButtonByText("-").trigger("click");
+    await findButtonByText("minus").trigger("click");
+    expect(wrapper.text()).toContain(`${INITIAL_VALUE - 1} / -1`);
     await wrapper.setProps({ initialValue: NEW_INITIAL_VALUE });
-    expect(wrapper.text()).toContain(NEW_INITIAL_VALUE);
+    expect(wrapper.text()).toContain(`${NEW_INITIAL_VALUE} / 0`);
   });
 });
