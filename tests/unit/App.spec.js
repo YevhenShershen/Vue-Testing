@@ -1,6 +1,6 @@
 import App from "@/App.vue";
 import { mount } from "@vue/test-utils";
-import { nextTick } from 'vue';
+import { nextTick } from "vue";
 
 describe("Counter", () => {
   //создаем переменную враппер
@@ -61,11 +61,30 @@ describe("Counter", () => {
   });
   it("increases by one when plus key is pressed", async () => {
     createComponent();
+    //KeyboardEvent objects describe a user interaction with the keyboard; each event describes a single interaction between the user and a key (or combination of a key with modifier keys) on the keyboard.
+    //The event type (keydown, keypress, or keyup)
     const event = new KeyboardEvent("keyup", {
       key: "+",
     });
     document.dispatchEvent(event);
     await nextTick();
-    expect(wrapper.text()).toContain("+");
+    expect(wrapper.text()).toContain("1");
+  });
+  it("removes attached event listener when detroyed", async () => {
+    jest.spyOn(document, "addEventListener");
+    jest.spyOn(document, "removeEventListener");
+    createComponent();
+    const [, keyUpListener] = document.addEventListener.mock.calls.find(
+      ([key]) => key === "keyup"
+    );
+    expect(document.removeEventListener).not.toHaveBeenCalledWith(
+      "keyup",
+      keyUpListener
+    );
+    wrapper.destroy();
+    expect(document.removeEventListener).toHaveBeenCalledWith(
+      "keyup",
+      keyUpListener
+    );
   });
 });
