@@ -12,8 +12,8 @@ describe("Counter", () => {
 
   //единственная фабрика создания компонента(враппер присваивает компонент)
   const createComponent = (props) => {
-    wrapper = mount(App,{
-      propsData: props
+    wrapper = mount(App, {
+      propsData: props,
     });
   };
   it("shows 0 when initialized", () => {
@@ -89,9 +89,12 @@ describe("Counter", () => {
       keyUpListener
     );
   });
-  it('correctly initializes when initialValue is passed',()=>{
-    const INITIAL_VALUE= 5;
-    createComponent({initialValue: INITIAL_VALUE});
-    expect(wrapper.text()).toContain(INITIAL_VALUE);
-  })
+  it("correctly resets when initialValue is changed", async () => {
+    const INITIAL_VALUE = 5;
+    const NEW_INITIAL_VALUE = 10;
+    createComponent({ initialValue: INITIAL_VALUE });
+    await findButtonByText("-").trigger("click");
+    await wrapper.setProps({ initialValue: NEW_INITIAL_VALUE });
+    expect(wrapper.text()).toContain(NEW_INITIAL_VALUE);
+  });
 });
