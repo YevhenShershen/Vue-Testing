@@ -49,6 +49,13 @@ describe("Counter", () => {
     //38минута как проверять ошибки на тесты
     //в терминале пишем
     //node --inspect-brk ./node_modules/jest/bin/jest.js
-    expect(wrapper.find("[data-test-id=reset]").exists()).toBe(true);
+    expect(findButtonByText('Reset').exists()).toBe(true);
+  });
+
+  it("does not shows reset button when counter is not below zero", async () => {
+    createComponent();
+    wrapper.vm.counter = 1;
+    await wrapper.vm.$nextTick();
+    expect(findButtonByText('Reset')).toBe(undefined);
   });
 });
