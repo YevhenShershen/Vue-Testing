@@ -1,5 +1,5 @@
 import App from "@/App.vue";
-import CounterInput from "@/components/CounterInput.vue"
+import CounterInput from "@/components/CounterInput.vue";
 import { shallowMount } from "@vue/test-utils";
 import { nextTick } from "vue";
 
@@ -49,7 +49,6 @@ describe("Counter", () => {
   //было удобно в одном месте изменять данные а не во всем коде
   const RESET_BUTTON = "Reset";
 
-
   it("shows reset button when counter is below zero", async () => {
     createComponent();
     await findButtonByText("-").trigger("click");
@@ -58,14 +57,12 @@ describe("Counter", () => {
     expect(findButtonByText(RESET_BUTTON).exists()).toBe(true);
   });
 
-
   it("does not shows reset button when counter is not below zero", async () => {
     createComponent();
 
     //неготивная проверка и это неправильно
     expect(findButtonByText(RESET_BUTTON)).toBe(undefined);
   });
-
 
   it("increases by one when plus key is pressed", async () => {
     createComponent();
@@ -78,7 +75,6 @@ describe("Counter", () => {
     await nextTick();
     expect(wrapper.text()).toContain("1");
   });
-
 
   it("removes attached event listener when detroyed", async () => {
     jest.spyOn(document, "addEventListener");
@@ -98,7 +94,6 @@ describe("Counter", () => {
     );
   });
 
-
   it("correctly resets both counters when initialValue is changed", async () => {
     const INITIAL_VALUE = 5;
     const NEW_INITIAL_VALUE = 10;
@@ -114,13 +109,14 @@ describe("Counter", () => {
     expect(wrapper.text()).toContain(`${NEW_INITIAL_VALUE} / 0`);
   });
 
-
-  it('passes current value to CounterInput',()=>{
+  it("update current value when CounterInput provides new one", async () => {
     const INITIAL_VALUE = 30;
-    createComponent({initialValue:INITIAL_VALUE})
-    //находим в врапере компонент CounterInput вытягиваем от туда значение пропса и сравниваем с значением INITIAL_VALUE
-    expect(wrapper.findComponent(CounterInput).props().value).toBe(INITIAL_VALUE);
+    const NEW_INITIAL_VALUE = 40;
+    createComponent({ initialValue: INITIAL_VALUE });
+    //единственный сценарий когда используем .vm. когда эмитим
+    wrapper.findComponent(CounterInput).vm.$emit("input", NEW_INITIAL_VALUE);
+    await nextTick();
 
-  })
-
+    expect(wrapper.text()).toContain(`${NEW_INITIAL_VALUE} / 0`);
+  });
 });
