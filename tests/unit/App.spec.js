@@ -43,6 +43,12 @@ describe("Counter", () => {
     createComponent();
     wrapper.vm.counter = -1;
     await wrapper.vm.$nextTick();
-    expect(wrapper.find({ ref: "reset" }).exists()).toBe(true);
+    //проверка на html
+    console.log(wrapper.html());
+    debugger
+    //38минута как проверять ошибки на тесты
+    //в терминале пишем
+    //node --inspect-brk ./node_modules/jest/bin/jest.js
+    expect(wrapper.find("[data-test-id=reset]").exists()).toBe(true);
   });
 });

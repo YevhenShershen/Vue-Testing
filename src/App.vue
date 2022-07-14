@@ -3,7 +3,7 @@
    {{counter}}
    <button @click="counter+=1">+</button>
    <button @click="counter-=1">-</button>
-  <button ref="reset" v-if="counter < 0" @click="counter = 0">Reset</button>
+  <button data-test-id="reset" v-if="counter < 0" @click="counter = 0">Reset</button>
   </div>
 </template>
 
