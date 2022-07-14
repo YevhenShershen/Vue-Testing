@@ -1,17 +1,16 @@
 import App from "@/App.vue";
 import { mount } from "@vue/test-utils";
 
+
 describe("Counter", () => {
   let wrapper;
   const findButtonByText = (text) =>
     wrapper.findAll("button").wrappers.find((w) => w.text() === text);
 
+    //единственная фабрика создания компонента
   const createComponent = () => {
     wrapper = mount(App);
   };
-  afterEach(() => {
-    wrapper.destroy();
-  });
   it("shows 0 when initialized", () => {
     //Arrange
     createComponent();
@@ -31,7 +30,8 @@ describe("Counter", () => {
     "$change when $buttonText button clicked",
     async ({ buttonText, expectedResult }) => {
       createComponent();
-
+      //В trigger также можно передать опциональный объект options
+      //примеры:  await wrapper.trigger('click') либо  await wrapper.trigger('click', {  button: 0  })
       await findButtonByText(buttonText).trigger("click");
       //await nextTick() - подождать пока произойдет следующий тик
       //nextTick - это Утилита для ожидания следующего сброса обновления DOM.
