@@ -119,4 +119,12 @@ describe("Counter", () => {
 
     expect(wrapper.text()).toContain(`${NEW_INITIAL_VALUE} / 0`);
   });
+
+
+  it("passes second value to CounterInput", async () => {
+    createComponent();
+    await findButtonByText("+").trigger("click");
+
+    expect(wrapper.findComponent(CounterInput).text()).toContain("1");
+  });
 });
