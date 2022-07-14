@@ -15,6 +15,23 @@ data(){
   return{
     counter:0
   }
+},
+methods:{
+handleKeyPress(e){
+   if (e.key === '-'){
+      this.counter -=1;
+    }
+    if (e.key === '+'){
+      this.counter +=1
+    }
+}
+},
+//Mounted — самый популярный хук жизненного цикла. Обычно его используют для извлечения данных для компонента
+mounted(){
+  document.addEventListener('keyup',this.handleKeyPress)
+},
+beforeDestroy(){
+document.removeEventListener('keyup', this.handleKeyPress)
 }
 };
 </script>

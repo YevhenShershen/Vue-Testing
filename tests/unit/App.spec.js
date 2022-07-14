@@ -1,13 +1,16 @@
 import App from "@/App.vue";
 import { mount } from "@vue/test-utils";
-
+import { nextTick } from 'vue';
 
 describe("Counter", () => {
+  //создаем переменную враппер
   let wrapper;
+
+  //функция принимающая текст и возвращающая враппер с элементом содержащим текст который мы указываем
   const findButtonByText = (text) =>
     wrapper.findAll("button").wrappers.find((w) => w.text() === text);
 
-    //единственная фабрика создания компонента
+  //единственная фабрика создания компонента(враппер присваивает компонент)
   const createComponent = () => {
     wrapper = mount(App);
   };
@@ -41,7 +44,7 @@ describe("Counter", () => {
   );
   // создаем переменную кнопка что бы в случае если название кнопки будет изменено
   //было удобно в одном месте изменять данные а не во всем коде
-  const RESET_BUTTON = 'Reset';
+  const RESET_BUTTON = "Reset";
   it("shows reset button when counter is below zero", async () => {
     createComponent();
     await findButtonByText("-").trigger("click");
@@ -55,5 +58,14 @@ describe("Counter", () => {
 
     //неготивная проверка и это неправильно
     expect(findButtonByText(RESET_BUTTON)).toBe(undefined);
+  });
+  it("increases by one when plus key is pressed", async () => {
+    createComponent();
+    const event = new KeyboardEvent("keyup", {
+      key: "+",
+    });
+    document.dispatchEvent(event);
+    await nextTick();
+    expect(wrapper.text()).toContain("+");
   });
 });
