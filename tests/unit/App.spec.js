@@ -7,6 +7,8 @@ const CounterInputStub = {
   template: '<div><slot></slot><slot name="warning"></slot></div>',
   //копирование пропсов из основного компонента
   props: CounterInput.props,
+  //$_vueTestUtils_original - хранит ссылку на исходный компонент
+  $_vueTestUtils_original: CounterInput,
 };
 describe("Counter", () => {
   //создаем переменную враппер
@@ -139,7 +141,7 @@ describe("Counter", () => {
   it("passescurrent value to CounterInput", () => {
     const INITIAL_VALUE = 30;
     createComponent({ initialValue: INITIAL_VALUE });
-    expect(wrapper.findComponent(CounterInputStub).props().value).toBe(INITIAL_VALUE);
+    expect(wrapper.findComponent(CounterInput).props().value).toBe(INITIAL_VALUE);
   });
 
   it("update current value when CounterInput provides new one", async () => {
@@ -148,7 +150,7 @@ describe("Counter", () => {
     createComponent({ initialValue: INITIAL_VALUE });
     //единственный сценарий когда используем .vm. когда эмитим
     wrapper
-      .findComponent(CounterInputStub)
+      .findComponent(CounterInput)
       .vm.$emit("input", NEW_INITIAL_VALUE);
     await nextTick();
 
@@ -159,12 +161,12 @@ describe("Counter", () => {
     createComponent();
     await findButtonByText("+").trigger("click");
 
-    expect(wrapper.findComponent(CounterInputStub).text()).toContain("1");
+    expect(wrapper.findComponent(CounterInput).text()).toContain("1");
   });
 
   it("passes BETA to CounterInput warning slot", () => {
     createComponent();
-    expect(wrapper.findComponent(CounterInputStub).text()).toContain("BETA");
-    console.log(wrapper.findComponent(CounterInputStub).text().html);
+    expect(wrapper.findComponent(CounterInput).text()).toContain("BETA");
+    console.log(wrapper.findComponent(CounterInput).text().html);
   });
 });
