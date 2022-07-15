@@ -3,6 +3,11 @@ import CounterInput from "@/components/CounterInput.vue";
 import { shallowMount } from "@vue/test-utils";
 import { nextTick } from "vue";
 
+const CounterInputStub = {
+  template: '<div><slot></slot><slot name="warning"></slot></div>',
+  //копирование пропсов из основного компонента
+  props: CounterInput.props,
+};
 describe("Counter", () => {
   //создаем переменную враппер
   let wrapper;
@@ -15,6 +20,14 @@ describe("Counter", () => {
   const createComponent = (props) => {
     wrapper = shallowMount(App, {
       propsData: props,
+      //stubs-Заглушка — это место, где вы заменяете существующую реализацию пользовательского компонента фиктивным компонентом,
+      // который вообще ничего не делает, что может упростить в остальном сложный тест.
+      stubs: {
+        //если мы используем mount и хотим что бы CounterINput не рендорился то используем
+        //CounterInput:true
+        //что бы рендерился настоящий CounterInput то пишем CounterInput:false
+        CounterInput: CounterInputStub,
+      },
     });
   };
   it("shows 0 when initialized", () => {
@@ -94,6 +107,20 @@ describe("Counter", () => {
     );
   });
 
+  it("correctly resets when initialValue is passed",  () => {
+    const INITIAL_VALUE = 5;
+    createComponent({ initialValue: INITIAL_VALUE });
+    expect(wrapper.text()).toContain(INITIAL_VALUE);
+  });
+  it("correctly resets when initialValue is changed", async () => {
+    const INITIAL_VALUE = 5;
+    const NEW_INITIAL_VALUE = 10;
+    createComponent({ initialValue: INITIAL_VALUE });
+    await findButtonByText("-").trigger("click");
+    await wrapper.setProps({ initialValue: NEW_INITIAL_VALUE });
+    expect(wrapper.text()).toContain(NEW_INITIAL_VALUE);
+  });
+
   it("correctly resets both counters when initialValue is changed", async () => {
     const INITIAL_VALUE = 5;
     const NEW_INITIAL_VALUE = 10;
@@ -109,22 +136,35 @@ describe("Counter", () => {
     expect(wrapper.text()).toContain(`${NEW_INITIAL_VALUE} / 0`);
   });
 
+  it("passescurrent value to CounterInput", () => {
+    const INITIAL_VALUE = 30;
+    createComponent({ initialValue: INITIAL_VALUE });
+    expect(wrapper.findComponent(CounterInputStub).props().value).toBe(INITIAL_VALUE);
+  });
+
   it("update current value when CounterInput provides new one", async () => {
     const INITIAL_VALUE = 30;
     const NEW_INITIAL_VALUE = 40;
     createComponent({ initialValue: INITIAL_VALUE });
     //единственный сценарий когда используем .vm. когда эмитим
-    wrapper.findComponent(CounterInput).vm.$emit("input", NEW_INITIAL_VALUE);
+    wrapper
+      .findComponent(CounterInputStub)
+      .vm.$emit("input", NEW_INITIAL_VALUE);
     await nextTick();
 
     expect(wrapper.text()).toContain(`${NEW_INITIAL_VALUE} / 0`);
   });
 
-
   it("passes second value to CounterInput", async () => {
     createComponent();
     await findButtonByText("+").trigger("click");
 
-    expect(wrapper.findComponent(CounterInput).text()).toContain("1");
+    expect(wrapper.findComponent(CounterInputStub).text()).toContain("1");
+  });
+
+  it("passes BETA to CounterInput warning slot", () => {
+    createComponent();
+    expect(wrapper.findComponent(CounterInputStub).text()).toContain("BETA");
+    console.log(wrapper.findComponent(CounterInputStub).text().html);
   });
 });

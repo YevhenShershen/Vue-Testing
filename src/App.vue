@@ -2,6 +2,7 @@
   <div id="app">
     <CounterInput v-model="counter">
       Current value of counter is {{ counter }}
+      <template #warning> STILL BETA </template>
     </CounterInput>
     <hr />
     {{ counter }} / {{ counter2 }}

@@ -10,6 +10,8 @@
     <hr />
     By the way,
     <slot></slot>
+    <hr />
+    <slot name="warning"></slot>
   </div>
 </template>
 
