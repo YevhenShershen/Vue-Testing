@@ -5,7 +5,7 @@
     <input
       type="text"
       :value="value"
-      @input="$emit('input', $event.target.value)"
+      @input="$emit('change', $event.target.value)"
     />
     <hr />
     By the way,
@@ -23,6 +23,12 @@ export default {
       type: Number,
       required: true,
     },
+    //поле model позволяет переопределить имя свойства которое будет приходить когда
+    //используем v-model и имя события которое мы используем
+    model:{
+prop: "value",
+event: "change"
+    }
   },
 };
 </script>

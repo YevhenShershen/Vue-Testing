@@ -7,6 +7,10 @@ const CounterInputStub = {
   template: '<div><slot></slot><slot name="warning"></slot></div>',
   //копирование пропсов из основного компонента
   props: CounterInput.props,
+  //копирование emits из основного компонента
+  emits: CounterInput.emits,
+  //копирование model из основного компонента
+  model: CounterInput.model,
   //$_vueTestUtils_original - хранит ссылку на исходный компонент
   $_vueTestUtils_original: CounterInput,
 };
@@ -109,7 +113,7 @@ describe("Counter", () => {
     );
   });
 
-  it("correctly resets when initialValue is passed",  () => {
+  it("correctly resets when initialValue is passed", () => {
     const INITIAL_VALUE = 5;
     createComponent({ initialValue: INITIAL_VALUE });
     expect(wrapper.text()).toContain(INITIAL_VALUE);
@@ -141,7 +145,9 @@ describe("Counter", () => {
   it("passescurrent value to CounterInput", () => {
     const INITIAL_VALUE = 30;
     createComponent({ initialValue: INITIAL_VALUE });
-    expect(wrapper.findComponent(CounterInput).props().value).toBe(INITIAL_VALUE);
+    expect(wrapper.findComponent(CounterInput).props().value).toBe(
+      INITIAL_VALUE
+    );
   });
 
   it("update current value when CounterInput provides new one", async () => {
@@ -151,7 +157,8 @@ describe("Counter", () => {
     //единственный сценарий когда используем .vm. когда эмитим
     wrapper
       .findComponent(CounterInput)
-      .vm.$emit("input", NEW_INITIAL_VALUE);
+      //если у CounterInput определена моделька то мы используем event ли бо дефолтное событе input"
+      .vm.$emit(CounterInput.model?.event ?? "input", NEW_INITIAL_VALUE);
     await nextTick();
 
     expect(wrapper.text()).toContain(`${NEW_INITIAL_VALUE} / 0`);
