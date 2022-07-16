@@ -27,6 +27,10 @@ describe("Counter", () => {
         //что бы рендерился настоящий CounterInput то пишем CounterInput:false
         CounterInput: CounterInputStub,
       },
+      //если используем слоты в самом компоненте
+      slots:{
+        warning: "HELLO"
+      }
     });
   };
   it("shows 0 when initialized", () => {
