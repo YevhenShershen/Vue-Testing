@@ -29,7 +29,7 @@ describe("Counter", () => {
       },
       //если используем слоты в самом компоненте
       slots:{
-        warning: "HELLO"
+        warning: "BETA"
       }
     });
   };
