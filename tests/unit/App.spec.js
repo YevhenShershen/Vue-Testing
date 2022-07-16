@@ -1,19 +1,12 @@
 import App from "@/App.vue";
 import CounterInput from "@/components/CounterInput.vue";
+import stubComponent from "./helpers/stubComponent";
 import { shallowMount } from "@vue/test-utils";
 import { nextTick } from "vue";
 
-const CounterInputStub = {
+const CounterInputStub = stubComponent(CounterInput, {
   template: '<div><slot></slot><slot name="warning"></slot></div>',
-  //копирование пропсов из основного компонента
-  props: CounterInput.props,
-  //копирование emits из основного компонента
-  emits: CounterInput.emits,
-  //копирование model из основного компонента
-  model: CounterInput.model,
-  //$_vueTestUtils_original - хранит ссылку на исходный компонент
-  $_vueTestUtils_original: CounterInput,
-};
+});
 describe("Counter", () => {
   //создаем переменную враппер
   let wrapper;
