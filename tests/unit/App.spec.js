@@ -1,6 +1,6 @@
 import App from "@/App.vue";
 import CounterInput from "@/components/CounterInput.vue";
-import stubComponent from "./helpers/stubComponent";
+import {stubComponent} from "./helpers/stubComponent.js";
 import { shallowMount } from "@vue/test-utils";
 import { nextTick } from "vue";
 
