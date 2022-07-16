@@ -174,3 +174,7 @@ describe("Counter", () => {
     console.log(wrapper.findComponent(CounterInput).text().html);
   });
 });
+//дождись пожалуйста результатов всех выполняющихся запросов аксиос
+//await axios.waitForAllRequests();
+//дождись перерисовки интерфейса
+//await nextTick()
